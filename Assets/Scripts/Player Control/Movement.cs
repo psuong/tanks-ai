@@ -40,15 +40,26 @@ public class Movement : MonoBehaviour {
         movementInput = Input.GetAxis(verticalInput);
         rotationalInput = Input.GetAxis(horizontalInput);
 	}
-
+    
+    // FixedUpdate is similar to Update, but will always run at a specific set interval
+    // no matter what kind of hardware you have.
     private void FixedUpdate() {
-
+        // Let's use FixedUpdate to apply movement and
+        // rotation to our player.
+        Move();
+        Rotate();
     }
 
     private void Move() {
         if (movementInput != 0) {
             Vector3 position = transform.forward * movementInput * playerSpeed * Time.deltaTime;
-            playerRigidbody.MovePosition(position);
+            playerRigidbody.MovePosition(position + playerRigidbody.position);
         }
+    }
+
+    private void Rotate() {
+        float turnAmount = turnSpeed * rotationalInput * Time.deltaTime;
+        Quaternion rotation = Quaternion.Euler(0, turnAmount, 0);
+        playerRigidbody.MoveRotation(playerRigidbody.rotation * rotation);
     }
 }
