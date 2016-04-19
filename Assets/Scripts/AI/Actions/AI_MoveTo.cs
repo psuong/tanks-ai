@@ -14,7 +14,7 @@ public class AI_MoveTo : StateMachineBehaviour {
         if (agent == null) {
             agent = animator.gameObject.GetComponent<NavMeshAgent>();
         }
-        if (conditions == null || playerPosition == null) {
+        if (conditions == null) {
             conditions = animator.gameObject.GetComponent<AI_Conditions>();
             playerPosition = conditions.player.transform.position;
         }
