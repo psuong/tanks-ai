@@ -24,7 +24,10 @@ public class AI_MoveTo : StateMachineBehaviour {
         // to the player.
         agent.SetDestination(playerPosition);
     }
-
+    
+    // So what happens when we remain in this state? We want to keep
+    // chasing down the player. So let's continuously update our NavMeshAgent
+    // to set the player's position as our destination.
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, AnimatorControllerPlayable controller) {
         base.OnStateUpdate(animator, stateInfo, layerIndex, controller);
         playerPosition = conditions.player.transform.position;
