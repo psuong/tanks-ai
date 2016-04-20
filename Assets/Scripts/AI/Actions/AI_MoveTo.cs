@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.Experimental.Director;
 
 public class AI_MoveTo : StateMachineBehaviour {
-
+    
     private NavMeshAgent agent;
     private Vector3 playerPosition;
     private AI_Conditions conditions;
