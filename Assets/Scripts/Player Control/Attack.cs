@@ -20,7 +20,7 @@ public class Attack : MonoBehaviour {
 	
 	// Update is called once per frame
 	private void Update () {
-	    if (Input.GetKeyUp(fireName) && Time.time > nextFireInterval) {
+	    if (Input.GetAxis(fireName) != 0 && Time.time > nextFireInterval) {
             nextFireInterval = Time.time + fireRate;
             
             // Create an instance of the shot and move it forward.
