@@ -44,8 +44,10 @@ public class AI_Conditions : MonoBehaviour {
 	private void Update () {
         // If the AI is within distance and within an angle of the player, then switch states.
         if (IsWithinSightDistance() && IsWithinPeripherals()) {
-            // TODO: Set a trigger that forces the state machine to change states.
             stateMachine.SetBool(withinSightName, true);
+        }
+        else {
+            stateMachine.SetBool(withinSightID, false);
         }
 
         // Ideally, we always want to update our distance between the player.

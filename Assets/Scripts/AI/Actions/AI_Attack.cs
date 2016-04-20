@@ -4,21 +4,31 @@ using UnityEngine.Experimental.Director;
 
 public class AI_Attack : StateMachineBehaviour {
 
-    public GameObject player;
-    public Rigidbody projectile;
-    public Transform shotPosition;
+    private GameObject player;
+    private Rigidbody projectile;
+    private Transform shotPosition;
 
-    public float shotForce = 1000f;
-    public float shotInterval = 0.5f;
+    private float shotForce;
+    private float shotInterval;
 
     private float nextShotInterval;
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        // If there is no instance of the player, let's access the AI_Conditions component and 
-        // assign a reference for this state.
+        // The following if statements are set up statements if there are no references.
         if (player == null) {
             player = animator.gameObject.GetComponent<AI_Conditions>().player;
         }
+
+        if (projectile == null) {
+            projectile = animator.gameObject.GetComponent<Shot_Supplements>().projectile;
+        }
+
+        if (shotPosition == null) {
+            shotPosition = animator.gameObject.GetComponent<Shot_Supplements>().shotPosition;
+        }
+
+        shotForce = animator.gameObject.GetComponent<Shot_Supplements>().shotForce;
+        shotInterval = animator.gameObject.GetComponent<Shot_Supplements>().fireInterval;
         
         // Let's set the interval when the state has been accessed.
         nextShotInterval = 0f;
@@ -26,6 +36,11 @@ public class AI_Attack : StateMachineBehaviour {
         // Rotate towards the player and let's fire a projectile.
         animator.transform.LookAt(player.transform);
 
+        Shoot();
+    }
+
+    public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        animator.transform.LookAt(player.transform);
         Shoot();
     }
 
@@ -38,5 +53,4 @@ public class AI_Attack : StateMachineBehaviour {
             shot.AddForce(shotPosition.forward * shotForce);
         }
     }
-    
 }
