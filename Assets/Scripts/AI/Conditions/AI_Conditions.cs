@@ -14,7 +14,7 @@ public class AI_Conditions : MonoBehaviour {
     public float sightAngle = 120;
     
     // What is the minimal distance needed for our AI to attack?
-    public float attackDistance = 20f;
+    public float attackRange = 20f;
     
     // The following strings below are meant to be hashed such that Unity
     // can find the IDs within the state machine.
@@ -50,6 +50,15 @@ public class AI_Conditions : MonoBehaviour {
 
         // Ideally, we always want to update our distance between the player.
         stateMachine.SetFloat(distanceID, GetDistance());
+
+        // Let's think about this, when do we want to attack?
+        // We only want to attack if our AI can both see our player
+        // and is within attacking range.
+        // Kind of like a human right?
+        if (IsWithinSightDistance() && IsWithinPeripherals() && GetDistance() < attackRange) {
+            // TODO: Set the trigger to attack.
+        }
+
 	}
     
     // Is the player within distance of the AI to notice?
