@@ -20,16 +20,19 @@ public class AI_Conditions : MonoBehaviour {
     // can find the IDs within the state machine.
     public string withinSightName = "See Enemy";
     public string distanceName = "Distance";
+    public string withinAttackName = "Within Attack Range";
 
-    // Some private fields.
     private Animator stateMachine;
     private int withinSightID;
-    private int distanceID;
+    private int withinAttackID;
 
 	// Use this for initialization
 	private void Start () {
         // Get the animator componenet attached to the AI controlled tank.
         stateMachine = GetComponent<Animator>();
+
+        // Just for a safety check, if we didn't drag the public reference
+        // in Unity's inspector, let's grab it so our code doesn't break. :)
         if (player == null) {
             player = GameObject.FindWithTag("Player");
         }
@@ -37,11 +40,12 @@ public class AI_Conditions : MonoBehaviour {
         // For speed, we want to Hash the ID, because internally
         // Unity does that everytime we pass a string to our animator.
         withinSightID = Animator.StringToHash(withinSightName);
-        distanceID = Animator.StringToHash(distanceName);
+        withinAttackID = Animator.StringToHash(withinAttackName);
 	}
 	
 	// Update is called once per frame
 	private void Update () {
+
         // If the AI is within distance and within an angle of the player, then switch states.
         if (IsWithinSightDistance() && IsWithinPeripherals()) {
             stateMachine.SetBool(withinSightName, true);
@@ -50,17 +54,16 @@ public class AI_Conditions : MonoBehaviour {
             stateMachine.SetBool(withinSightID, false);
         }
 
-        // Ideally, we always want to update our distance between the player.
-        stateMachine.SetFloat(distanceID, GetDistance());
-
         // Let's think about this, when do we want to attack?
         // We only want to attack if our AI can both see our player
         // and is within attacking range.
         // Kind of like a human right?
         if (IsWithinSightDistance() && IsWithinPeripherals() && GetDistance() < attackRange) {
-            // TODO: Set the trigger to attack.
+            stateMachine.SetBool(withinAttackID, true);
         }
-
+        else {
+            stateMachine.SetBool(withinAttackID, false);
+        }
 	}
     
     // Is the player within distance of the AI to notice?
@@ -79,8 +82,8 @@ public class AI_Conditions : MonoBehaviour {
         }
         return false;
     }
-    
-    // This will grab the distance between the AI and the player.
+
+    // Let's grab the distance between the AI and our player.
     private float GetDistance() {
         return Vector3.Distance(gameObject.transform.position, player.transform.position);
     }
