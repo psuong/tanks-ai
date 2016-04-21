@@ -21,11 +21,13 @@ public class AI_Conditions : MonoBehaviour {
     public string withinSightName = "See Enemy";
     public string distanceName = "Distance";
     public string withinAttackName = "Within Attack Range";
+    public string dieName = "Die";
 
     // The following private fields are associated with Unity's Mecanim/Animator system.
     private Animator stateMachine;
     private int withinSightID;
     private int withinAttackID;
+    private int dieID;
 
     // AI Tank Properties
     private float tankHealth;
@@ -34,6 +36,8 @@ public class AI_Conditions : MonoBehaviour {
 	private void Start () {
         // Get the animator componenet attached to the AI controlled tank.
         stateMachine = GetComponent<Animator>();
+
+        tankHealth = gameObject.GetComponent<TankHealth>().CurrentHealth;
 
         // Just for a safety check, if we didn't drag the public reference
         // in Unity's inspector, let's grab it so our code doesn't break. :)
@@ -45,6 +49,7 @@ public class AI_Conditions : MonoBehaviour {
         // Unity does that everytime we pass a string to our animator.
         withinSightID = Animator.StringToHash(withinSightName);
         withinAttackID = Animator.StringToHash(withinAttackName);
+        dieID = Animator.StringToHash(dieName);
 	}
 	
 	// Update is called once per frame
@@ -67,6 +72,11 @@ public class AI_Conditions : MonoBehaviour {
         }
         else {
             stateMachine.SetBool(withinAttackID, false);
+        }
+
+        // If our AI's health is below 0, let's kill our AI.
+        if (tankHealth < 0) {
+            stateMachine.SetTrigger(dieID);
         }
 	}
     
