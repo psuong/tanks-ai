@@ -109,7 +109,6 @@ public class AI_Conditions : MonoBehaviour {
         float rngChance = rng.Next(0, 10000) / 10000f;
 
         if (other.CompareTag("Projectile") && rngChance > dodgeChance)  {
-            Debug.Log("Dodge");
             stateMachine.SetTrigger(dodgeID);
         }
     }
