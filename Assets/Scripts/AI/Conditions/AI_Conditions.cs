@@ -16,6 +16,11 @@ public class AI_Conditions : MonoBehaviour {
     // What is the minimal distance needed for our AI to attack?
     public float attackRange = 20f;
     
+    // Let's make our retreatThreshold pretty!
+    // This field is used to determine at what percent should our AI retreat.
+    [Range(0.1f, 1f)]
+    public float retreatThreshold;
+    
     // The following strings below are meant to be hashed such that Unity
     // can find the IDs within the state machine.
     public string withinSightName = "See Enemy";
@@ -30,14 +35,16 @@ public class AI_Conditions : MonoBehaviour {
     private int dieID;
 
     // AI Tank Properties
-    private float tankHealth;
+    private float baseHealth;
+    private float currentHealth;
 
 	// Use this for initialization
 	private void Start () {
         // Get the animator componenet attached to the AI controlled tank.
         stateMachine = GetComponent<Animator>();
 
-        tankHealth = gameObject.GetComponent<TankHealth>().CurrentHealth;
+        currentHealth = gameObject.GetComponent<TankHealth>().CurrentHealth;
+        baseHealth = gameObject.GetComponent<TankHealth>().tankHealth;
 
         // Just for a safety check, if we didn't drag the public reference
         // in Unity's inspector, let's grab it so our code doesn't break. :)
@@ -75,7 +82,7 @@ public class AI_Conditions : MonoBehaviour {
         }
 
         // If our AI's health is below 0, let's kill our AI.
-        if (tankHealth < 0) {
+        if (currentHealth < 0) {
             stateMachine.SetTrigger(dieID);
         }
 	}
