@@ -108,4 +108,9 @@ public class AI_Conditions : MonoBehaviour {
     private float GetDistance() {
         return Vector3.Distance(gameObject.transform.position, player.transform.position);
     }
+    
+    // Calculate the percent of what the tank's health is.
+    private float GetHealthPercent() {
+        return currentHealth / baseHealth;
+    }
 }
