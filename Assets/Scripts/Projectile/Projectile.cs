@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class Projectile : MonoBehaviour {
-
+    
+    // Amount of damage the projectiles does.
     public float damage = 20f;
     
     public void OnTriggerEnter(Collider other) {
