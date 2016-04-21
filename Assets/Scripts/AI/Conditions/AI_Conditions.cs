@@ -22,9 +22,13 @@ public class AI_Conditions : MonoBehaviour {
     public string distanceName = "Distance";
     public string withinAttackName = "Within Attack Range";
 
+    // The following private fields are associated with Unity's Mecanim/Animator system.
     private Animator stateMachine;
     private int withinSightID;
     private int withinAttackID;
+
+    // AI Tank Properties
+    private float tankHealth;
 
 	// Use this for initialization
 	private void Start () {
