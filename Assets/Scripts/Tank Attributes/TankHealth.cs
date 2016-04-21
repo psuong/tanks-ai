@@ -20,14 +20,13 @@ public class TankHealth : MonoBehaviour {
         currentHealth = tankHealth;
 	}
 	
-	// Update is called once per frame
-	private void Update () {
-
-    }
-    
     // Perform a calculation to the internal health. Our projectile should
     // do damage anyhow.
     private void TakeDamage(float damage) {
         currentHealth -= damage;
+
+        if (currentHealth <= 0 && tag == "Player") {
+            gameObject.SetActive(false);
+        }
     }
 }

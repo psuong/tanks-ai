@@ -76,6 +76,8 @@ public class AI_Conditions : MonoBehaviour {
 	// Update is called once per frame
 	private void Update () {
 
+        currentHealth = gameObject.GetComponent<TankHealth>().CurrentHealth;
+
         // If the AI is within distance and within an angle of the player, then switch states.
         if (IsWithinSightDistance() && IsWithinPeripherals()) {
             stateMachine.SetBool(withinSightName, true);
@@ -96,7 +98,7 @@ public class AI_Conditions : MonoBehaviour {
         }
 
         // If our AI's health is below 0, let's kill our AI.
-        if (currentHealth < 0) {
+        if (currentHealth <= 0) {
             stateMachine.SetTrigger(dieID);
         }
 	}
