@@ -41,7 +41,7 @@ public class CameraFollow : MonoBehaviour {
         }
     }
 
-    void Update() {
+    void LateUpdate() {
 
         // If target is not assigned, then stop early
         if ( target == null )
@@ -51,7 +51,7 @@ public class CameraFollow : MonoBehaviour {
         followPosition = target.position;
         var distance = Vector3.Distance(target.position, secondaryTarget.position);
 
-        if ( lockHeight )
+        if ( !lockHeight )
             followPosition.y = Mathf.Clamp(distance * rootThree, heightRange.x, heightRange.y);
         else
             followPosition.y = transform.position.y;
