@@ -20,7 +20,10 @@ public class AI_Conditions : MonoBehaviour {
     // Let's make our retreatThreshold pretty!
     // This field is used to determine at what percent should our AI retreat.
     [Range(0.1f, 1f)]
-    public float dodgeChance;
+    public float dodgeChance = 0.5f;
+
+    // Our dodge radius or what is the length our AI should move by when it detects a projectile?
+    public float dodgeRadius = 2f;
     
     // The following strings below are meant to be hashed such that Unity
     // can find the IDs within the state machine.
@@ -103,7 +106,10 @@ public class AI_Conditions : MonoBehaviour {
     private void OnTriggerEnter(Collider other) {
         // We should only perform dodge every now and then, so let's use a random number generator
         // to create that percent chance.
-        if (other.CompareTag("Projectile") && rng.Next(0, 10000) / 10000 > dodgeChance)  {
+        float rngChance = rng.Next(0, 10000) / 10000f;
+
+        if (other.CompareTag("Projectile") && rngChance > dodgeChance)  {
+            Debug.Log("Dodge");
             stateMachine.SetTrigger(dodgeID);
         }
     }
