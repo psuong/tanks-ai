@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Random = System.Random;
 using System.Collections;
 
 public class AI_Conditions : MonoBehaviour {
@@ -19,24 +20,29 @@ public class AI_Conditions : MonoBehaviour {
     // Let's make our retreatThreshold pretty!
     // This field is used to determine at what percent should our AI retreat.
     [Range(0.1f, 1f)]
-    public float retreatThreshold;
+    public float dodgeChance;
     
     // The following strings below are meant to be hashed such that Unity
     // can find the IDs within the state machine.
     public string withinSightName = "See Enemy";
     public string distanceName = "Distance";
     public string withinAttackName = "Within Attack Range";
+    public string dodgeName = "Dodge";
     public string dieName = "Die";
 
     // The following private fields are associated with Unity's Mecanim/Animator system.
     private Animator stateMachine;
     private int withinSightID;
     private int withinAttackID;
+    private int dodgeID;
     private int dieID;
 
     // AI Tank Properties
     private float baseHealth;
     private float currentHealth;
+
+    // Random Number Generator needed to check chance.
+    private Random rng;
 
 	// Use this for initialization
 	private void Start () {
@@ -45,6 +51,10 @@ public class AI_Conditions : MonoBehaviour {
 
         currentHealth = gameObject.GetComponent<TankHealth>().CurrentHealth;
         baseHealth = gameObject.GetComponent<TankHealth>().tankHealth;
+
+        // Initialize our RNG in case we need to use it.
+        rng = new Random();
+        
 
         // Just for a safety check, if we didn't drag the public reference
         // in Unity's inspector, let's grab it so our code doesn't break. :)
@@ -56,6 +66,7 @@ public class AI_Conditions : MonoBehaviour {
         // Unity does that everytime we pass a string to our animator.
         withinSightID = Animator.StringToHash(withinSightName);
         withinAttackID = Animator.StringToHash(withinAttackName);
+        dodgeID = Animator.StringToHash(dodgeName);
         dieID = Animator.StringToHash(dieName);
 	}
 	
@@ -85,9 +96,17 @@ public class AI_Conditions : MonoBehaviour {
         if (currentHealth < 0) {
             stateMachine.SetTrigger(dieID);
         }
-
-        // TODO: Let's make our AI more interesting!
 	}
+    
+    // Let's make our AI more interesting. OnTriggerEnter only works when something hits the
+    // the collider.
+    private void OnTriggerEnter(Collider other) {
+        // We should only perform dodge every now and then, so let's use a random number generator
+        // to create that percent chance.
+        if (other.CompareTag("Projectile") && rng.Next(0, 10000) / 10000 > dodgeChance)  {
+            stateMachine.SetTrigger(dodgeID);
+        }
+    }
     
     // Is the player within distance of the AI to notice?
     private bool IsWithinSightDistance() {
