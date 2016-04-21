@@ -85,6 +85,8 @@ public class AI_Conditions : MonoBehaviour {
         if (currentHealth < 0) {
             stateMachine.SetTrigger(dieID);
         }
+
+        // TODO: Let's make our AI more interesting!
 	}
     
     // Is the player within distance of the AI to notice?
